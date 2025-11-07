@@ -1,0 +1,5 @@
+test-home vus="10" duration="10s" *args="":
+  k6 run ./scripts/home.ts \
+    --vus {{vus}} \
+    --duration {{duration}} \
+    {{args}}

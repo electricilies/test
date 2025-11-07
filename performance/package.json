@@ -1,0 +1,8 @@
+{
+  "$schema": "https://www.schemastore.org/package.json",
+  "name": "electricilies-test-performance",
+  "type": "module",
+  "devDependencies": {
+    "@types/k6": "^1.3.1"
+  }
+}

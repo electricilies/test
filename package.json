@@ -1,0 +1,10 @@
+{
+  "$schema": "https://www.schemastore.org/package.json",
+  "name": "electricilies-test",
+  "version": "0.0.0",
+  "description": "Sấm seggg",
+  "workspaces": [
+    "e2e",
+    "performance"
+  ]
+}

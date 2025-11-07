@@ -1,0 +1,10 @@
+{
+  "$schema": "https://www.schemastore.org/package.json",
+  "name": "electricilies-test-e2e",
+  "type": "module",
+  "devDependencies": {
+    "@playwright/test": "^1.56.1",
+    "@types/node": "^24.10.0"
+  },
+  "scripts": {}
+}
