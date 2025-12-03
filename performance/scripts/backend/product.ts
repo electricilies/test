@@ -1,25 +1,28 @@
 import http from "k6/http";
 import { Options } from "k6/options";
 
-const endpoint = process.env.BACKEND_ENDPOINT;
-if (!endpoint) {
-  throw new Error("BACKEND_ENDPOINT environment variable is not set");
-}
-const api = `${endpoint}/api`;
+const api = `${__ENV.BACKEND_ENDPOINT}/api`;
 
 export const options: Options = {
   scenarios: {
     list: {
-      executor: "shared-iterations",
-      vus: 50,
-      maxDuration: "30s",
+      executor: "ramping-vus",
       exec: "list",
+      stages: [
+        { duration: "10s", target: 20 },
+        { duration: "10s", target: 50 },
+        { duration: "90s", target: 100 },
+        { duration: "10s", target: 5 },
+      ],
     },
     details: {
-      executor: "shared-iterations",
-      vus: 20,
-      maxDuration: "30s",
+      executor: "ramping-vus",
       exec: "gets",
+      stages: [
+        { duration: "10s", target: 20 },
+        { duration: "100s", target: 50 },
+        { duration: "10s", target: 5 },
+      ],
     },
   },
 };
