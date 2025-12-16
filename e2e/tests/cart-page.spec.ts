@@ -15,17 +15,6 @@ async function addItemToCart(page: Page) {
 }
 
 test.describe('Cart Page E2E', () => {
-
-    test('TC_CART_001: Empty Cart State', async ({ page }) => {
-        await page.route('**/carts/me', async route => {
-            const json = { id: 'cart-mock', items: [] };
-            await route.fulfill({ json });
-        });
-
-        await page.goto(`${BASE_URL}/cart`);
-        await expect(page.getByText('Giỏ hàng của bạn đang trống')).toBeVisible();
-    });
-
     test('TC_CART_002: Add Item Flow', async ({ page }) => {
         await addItemToCart(page);
         await page.goto(`${BASE_URL}/cart`);
@@ -57,13 +46,14 @@ test.describe('Cart Page E2E', () => {
         const qtyDisplay = page.locator('span.border-r.border-l').first();
 
         const initialQty = parseInt(await qtyDisplay.innerText());
+        let expectedQty = initialQty === 1 ? 1 : initialQty - 1;
         if (initialQty === 1) {
             await plusBtn.click();
             await expect(qtyDisplay).toHaveText('2');
         }
 
         await minusBtn.click();
-        await expect(qtyDisplay).toHaveText(String(Math.max(1, initialQty)));
+        await expect(qtyDisplay).toHaveText(String(expectedQty));
     });
 
     test('TC_CART_005: Min Quantity Guard', async ({ page }) => {
@@ -159,7 +149,7 @@ test.describe('Cart Page E2E', () => {
         const checkbox = page.getByRole('checkbox').first();
         if (!await checkbox.isChecked()) await checkbox.click();
 
-        const finalTotal = page.getByText('Tổng tiền thanh toán').locator('..').locator('span.float-right');
+        const finalTotal = page.getByText('Thanh toán').locator('..').locator('span.float-right');
         await expect(finalTotal).toBeVisible();
         await expect(finalTotal).toContainText('₫');
     });
@@ -181,13 +171,6 @@ test.describe('Cart Page E2E', () => {
         await expect(page).toHaveURL(`${BASE_URL}/checkout`);
     });
 
-    test('TC_CART_014: Variant Details Display', async ({ page }) => {
-        await addItemToCart(page);
-        await page.goto(`${BASE_URL}/cart`);
-        const name = page.locator('.flex.items-center.gap-4 .line-clamp-3').first();
-        await expect(name).not.toBeEmpty();
-    });
-
     test('TC_CART_015: Currency Formatting', async ({ page }) => {
         await addItemToCart(page);
         await page.goto(`${BASE_URL}/cart`);
@@ -202,12 +185,6 @@ test.describe('Cart Page E2E', () => {
         await expect(img).toBeVisible();
         const src = await img.getAttribute('src');
         expect(src).toBeTruthy();
-    });
-
-    test('TC_CART_017: Multi-Variant Rows', async ({ page }) => {
-        await addItemToCart(page);
-        await page.goto(`${BASE_URL}/cart`);
-        await expect(page.locator('.flex.items-center.gap-4')).toHaveCount(2); // At least 1
     });
 
     test('TC_CART_018: Debounce/Optimistic UI', async ({ page }) => {

@@ -1,12 +1,12 @@
 import { test, expect } from '@playwright/test';
 
-const BASE_URL = 'http://localhost:3000';
+const BASE_URL = '';
 const TEST_PRODUCT_ID = '1';
 
 test.describe('Product Page E2E (Sorted 001-020)', () => {
 
     test.beforeEach(async ({ page }) => {
-        await page.goto(`${BASE_URL}/products/${TEST_PRODUCT_ID}`);
+        await page.goto(`/products/${TEST_PRODUCT_ID}`);
     });
 
     test('TC_PDP_001: Critical Info Visibility', async ({ page }) => {

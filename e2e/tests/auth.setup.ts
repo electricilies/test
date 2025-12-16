@@ -1,7 +1,10 @@
 import { test as setup, expect } from '@playwright/test';
 
+const USERNAME = 'admin'
+const PASSWORD = 'admin'
+
 setup('global login via Keycloak', async ({ page }) => {
-    await page.goto('http://localhost:3000');
+    await page.goto('/');
 
     // Redirects to /api/auth/signin
     await page.getByRole('button', { name: /keycloak/i }).click();
@@ -9,18 +12,11 @@ setup('global login via Keycloak', async ({ page }) => {
     // Keycloak login page
     await page.waitForURL(/keycloak/i);
 
-    await page.fill('#username', 'input_your_username_here');
-    await page.fill('#password', 'input_your_password_here');
+    await page.fill('#username', USERNAME);
+    await page.fill('#password', PASSWORD);
     await page.click('#kc-login');
 
-
-    await page.waitForURL('http://localhost:3000/**', {
-        timeout: 20_000,
-    });
-
-    // 🔍 sanity check — must NOT be on login page
     await expect(page).not.toHaveURL(/signin|keycloak/);
 
-    // Save authenticated browser state
     await page.context().storageState({ path: 'storageState.json' });
 });
