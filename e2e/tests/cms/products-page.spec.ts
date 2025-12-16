@@ -116,7 +116,7 @@ test.describe('Admin Products Page E2E', () => {
         await page.goto(PAGE_URL);
     });
 
-    test('TC_01: Render Heading', async ({ page }) => {
+    test('TC_CMS_PROD_01: Render Heading', async ({ page }) => {
         await expect(page.getByRole('heading', { name: 'Products List' })).toBeVisible();
 
         const addButton = page.locator('a[href="/admin/products/new"]');
@@ -126,14 +126,14 @@ test.describe('Admin Products Page E2E', () => {
         await expect(searchInput).toBeVisible();
     });
 
-    test('TC_02: Render Table Headings', async ({ page }) => {
+    test('TC_CMS_PROD_02: Render Table Headings', async ({ page }) => {
         const headers = ['Name', 'Price', 'Purchased', 'Rating', 'Last Updated', 'Cover Image', 'Actions'];
         for (const header of headers) {
             await expect(page.getByRole('columnheader', { name: header })).toBeVisible();
         }
     })
 
-    test('TC_03: Render Product Row', async ({ page }) => {
+    test('TC_CMS_PROD_03: Render Product Row', async ({ page }) => {
         const firstRow = page.locator('tbody tr').first();
         await expect(firstRow).toContainText(productName);
         await expect(firstRow).toContainText('2599000');
@@ -145,21 +145,21 @@ test.describe('Admin Products Page E2E', () => {
     test.describe('Search Functionality', () => {
         const searchTerm = 'Testing Item';
         const placeholderText = 'Type a product name to search...'
-        test('TC_04: Search Results Update URL', async ({ page }) => {
+        test('TC_CMS_PROD_04: Search Results Update URL', async ({ page }) => {
             const searchInput = page.getByPlaceholder(placeholderText);
             await searchInput.fill(searchTerm);
             await searchInput.press('Enter');
             await expect(page).toHaveURL(new RegExp(`search=${encodeURIComponent(searchTerm)}`.replace(/%20/g, '\\+')));
         });
 
-        test('TC_05: Search Retains Input Value', async ({ page }) => {
+        test('TC_CMS_PROD_05: Search Retains Input Value', async ({ page }) => {
             const searchInput = page.getByPlaceholder(placeholderText);
             await searchInput.fill(searchTerm);
             await searchInput.press('Enter');
             await expect(searchInput).toHaveValue(searchTerm);
         })
 
-        test('TC_06: Search Results Displayed', async ({ page }) => {
+        test('TC_CMS_PROD_06: Search Results Displayed', async ({ page }) => {
             const searchInput = page.getByPlaceholder(placeholderText);
             await searchInput.fill(searchTerm);
 
@@ -182,13 +182,13 @@ test.describe('Admin Products Page E2E', () => {
         });
     });
 
-    test('TC_07: "Add Button Redirects Correctly', async ({ page }) => {
+    test('TC_CMS_PROD_07: "Add Button Redirects Correctly', async ({ page }) => {
         const addButton = page.locator('a[href="/admin/products/new"]');
         await addButton.click();
         await expect(page).toHaveURL(/\/admin\/products\/new/);
     });
 
-    test('TC_08: Product Name Opens Product Page', async ({ page }) => {
+    test('TC_CMS_PROD_08: Product Name Opens Product Page', async ({ page }) => {
         const productLink = page.getByRole('link', { name: productName });
         await expect(productLink).toHaveAttribute('target', '_blank');
         await expect(productLink).toHaveAttribute('href', `/products/00000000-0000-7000-0000-000278469345`);
@@ -199,7 +199,7 @@ test.describe('Admin Products Page E2E', () => {
         await expect(newPage).toHaveURL(new RegExp(`/products/00000000-0000-7000-0000-000278469345`));
     });
 
-    test('TC_09: Render Table Actions', async ({ page }) => {
+    test('TC_CMS_PROD_09: Render Table Actions', async ({ page }) => {
         const row = page.locator('tbody tr').first();
         const editBtn = row.locator('svg.lucide-square-pen');
         const deleteBtn = row.locator('svg.lucide-trash2');
